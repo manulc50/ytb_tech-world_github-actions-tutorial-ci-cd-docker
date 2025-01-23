@@ -51,7 +51,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
 
-    - run: ls
+    - run: ls build/libs
 
     #- name: Build and Push Docker Image
       # Podemos ejecutar los comandos para realizar la tarea o podemos usar una Acción de GitHub o de terceros
