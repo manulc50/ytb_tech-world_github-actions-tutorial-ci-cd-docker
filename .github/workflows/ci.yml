@@ -51,14 +51,12 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
 
-    - run: ls build/libs
-
     - name: Build and Push Docker Image
       # Podemos ejecutar los comandos para realizar la tarea o podemos usar una Acción de GitHub o de terceros
       #run: |
         #docker login cred
         #docker build ...
-      # Acción de terceros (Versión 4 de la Acción "docker-build-push" de "mr-smithers-excellent")
+      # Acción de terceros (Versión 4 de la Acción "docker-build-push" de "mr-smithers-excellent") para construir la imagen de Docker y subirla o publicarla en un repositorio remoto
       uses: mr-smithers-excellent/docker-build-push@v4
       # Parámetros de la Acción
       with:
