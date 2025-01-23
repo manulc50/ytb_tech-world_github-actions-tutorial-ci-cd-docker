@@ -19,15 +19,17 @@ jobs:
   build:
 
     # Entorno de ejecución de las acciones o etapas del trabajo
-    #runs-on: ubuntu-latest
+    # Nota: Este entorno de ejecución "ubuntu-latest" ya viene con Docker instalado
+    runs-on: ubuntu-latest
 
     # Nota: Si queremos ejecutar las acciones y etapas del trabajo en diferentes entornos de ejecución, podemos hacer lo siguiente:
-    # Obtiene el valor de la propiedad o atributo "matrix.os" que contiene el array o lista de entornos de ejecución
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
+    # Obtiene el valor de la propiedad o atributo "matrix.os" que contiene el array o lista de entornos de ejecución.
+    # El trabajo se ejecuta en cada entorno de ejecución en paralelo.
+    #runs-on: ${{ matrix.os }}
+    #strategy:
+      #matrix:
         # Definimos un array o lista de entornos de ejecución donde queremos ejecutar las acciones o etapas del trabajo
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        #os: [ubuntu-latest, windows-latest, macOS-latest]
 
     # Acciones o etapas del trabajo [obligatorio]
     steps:
@@ -37,6 +39,7 @@ jobs:
     # Acción de GitHub (Versión 1 de la Acción "setup-java" de GitHub) que instala y configura la versión 1.8 del JDK de Java en el entorno de ejecución indicado más arriba
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
+      # Parámetros de la Acción
       with:
         java-version: '1.8'
     
@@ -47,6 +50,20 @@ jobs:
     # Comando para construir la aplicación con Gradle
     - name: Build with Gradle
       run: ./gradlew build
+
+    - name: Build and Push Docker Image
+      # Podemos ejecutar los comandos para realizar la tarea o podemos usar una Acción de GitHub o de terceros
+      #run: |
+        #docker login cred
+        #docker build ...
+      # Acción de terceros (Versión 4 de la Acción "docker-build-push" de "mr-smithers-excellent")
+      uses: mr-smithers-excellent/docker-build-push@v4
+      # Parámetros de la Acción
+      with:
+        image: manulc/ytb_tech-world_github-actions-tutorial-ci-cd-docker
+        registry: docker.io # DockerHub
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD}}
 
   #publish:
 
