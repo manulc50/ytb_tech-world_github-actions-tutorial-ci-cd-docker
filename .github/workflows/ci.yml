@@ -13,10 +13,21 @@ on:
 # Trabajos que componen el workflow (uno o varios) [obligatorio] 
 jobs:
   # Id del trabajo (agrupa una serie de acciones o etapas a ejecutar)
+  # Nota: Cada trabajo de un workflow se ejecuta en un entorno de ejecucuón diferente y, por defecto,
+  # cada trabajo se ejecuta en paralelo (En caso de haber dependencia de un trabajo con respecto a otro, puede
+  # configurarse para que se ejecuten uno a continuación de otro)
   build:
 
     # Entorno de ejecución de las acciones o etapas del trabajo
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+
+    # Nota: Si queremos ejecutar las acciones y etapas del trabajo en diferentes entornos de ejecución, podemos hacer lo siguiente:
+    # Obtiene el valor de la propiedad o atributo "matrix.os" que contiene el array o lista de entornos de ejecución
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # Definimos un array o lista de entornos de ejecución donde queremos ejecutar las acciones o etapas del trabajo
+        os: [ubuntu-latest, windows-latest, macOS-latest]
 
     # Acciones o etapas del trabajo [obligatorio]
     steps:
@@ -36,3 +47,9 @@ jobs:
     # Comando para construir la aplicación con Gradle
     - name: Build with Gradle
       run: ./gradlew build
+
+  #publish:
+
+    # Indicamos que este trabajo depende del trabajo con id "build" para que este trabajo se ejecute a continuación del
+    # trabajo con id "build" y así evitar que ámbos se ejecuten en paralelo (ejecución por defecto)
+    #needs: build
